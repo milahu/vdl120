@@ -1,6 +1,6 @@
 /*
 *
-*  vdl120: The Voltcraft DL-120TH tool
+*  vdl120: The Voltcraft DL-120TH tool originally written by milahu
 *
 *   + write configuration
 *   + read configuration
@@ -21,6 +21,10 @@
 *
 */
 
+
+/*This is a modified sourcefile (by Markus Hoffmann 2011), it fixes:
+  * readout correctly more than 2048 datapoints.
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -308,6 +312,7 @@ read_data(
 ) {
 	
 	char buf[BUFSIZE];
+	int count=0;
 	//char buf[1024];
 	int ret, i, num_data;
 	
@@ -334,7 +339,7 @@ read_data(
 	}
 	
 	buf[0] = 0x00;
-	buf[1] = 0x00;
+	buf[1] = count++;/* Adress  0 */
 	buf[2] = 0x40;
 	
 	ret = usb_bulk_write(
@@ -372,14 +377,18 @@ read_data(
 	while (num_data < cfg->num_data_rec)
 	{
 		
-		/* send (random?) keep-alive packet every 1024 bytes */
+		
+		/* it looks like that one must set a base adress
+		   every 1024 data points (= every 64 packets, 4096 bytes)*/
+		
 		/* the logger sends another response header before further data */
 		
 		if (num_data > 0 && num_data % 1024 == 0)
 		{
 			buf[0] = 0x00;
-			buf[1] = 0x01;
+			buf[1] = count++;/* Adress  0 */
 			buf[2] = 0x40;
+			printf("send bankset: 0x%02x \n", 0xFF & buf[1]);
 			ret = usb_bulk_write(
 				dev_hdl,
 				EP_OUT,
