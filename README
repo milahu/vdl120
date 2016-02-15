@@ -1,3 +1,17 @@
+vdl120 (c) 2010 - 2016 by milahu et al.
+
+Readlout and configuring software for the Voltcraft DL-120TH USB 
+climate data logger and others.
+
+Version 1.0 is public domain, any further version use the GPLv2 licence.
+
+
+
+
+
+
+Original README for Version 1.00 by milahu 2010-07-01:
+
 vdl120
     Software for the Voltcraft DL-120TH USB climate data logger
 
