@@ -1,0 +1,5 @@
+This is a modified sourcefile (by Markus Hoffmann 2011-2012), it fixes:
+  * readout correctly more then 2048 datapoints.
+  * segfault fixed with saving data to file
+  * Implements also support for new version of dataloggers
+  
