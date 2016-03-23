@@ -541,7 +541,8 @@ store_data(
 		data_curr = data_curr->next;
 	} while (data_curr != NULL);
 
-printf("data_curr->next = %p\n", data_curr->next);
+	if(data_curr)
+		printf("data_curr->next = %p\n", data_curr->next);
 	
 	fclose(dumpfile);
 }
@@ -595,13 +596,12 @@ build_config(
 	int start                       /* start loggin: 1 = manually, 2 = automatically */
 ) {
 	struct config *cfg = NULL;
-	cfg = malloc(sizeof(struct config));
+	cfg = calloc(1,sizeof(struct config));
 	if (cfg == NULL)
 	{
 		printf("build_config: failed to malloc struct config\n");
 		return NULL;
 	}
-	memset(cfg, 0, sizeof(cfg));
 	
 	cfg->config_begin = 0xce;
 	cfg->config_end = 0xce;
@@ -609,6 +609,7 @@ build_config(
 	cfg->start = start;
 	
 	cfg->num_data_conf = num_data;
+	cfg->num_data_rec = 0;		
 	cfg->interval = interval;
 	
 	time_t now_stamp = 0;
@@ -635,10 +636,10 @@ build_config(
 	cfg->led_conf = (led_alarm & 1 << 7) | (led_freq & 0x1F);
 	
 	strncpy(cfg->name, name, 16);
-	
+	cfg->name[16-1]=0;
+
 	cfg->thresh_rh_low  = num2bin(thresh_rh_low);
 	cfg->thresh_rh_high = num2bin(thresh_rh_high);
-	
 	return cfg;
 }
 
