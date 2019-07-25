@@ -16,7 +16,6 @@
 *   + port to libusb-1.x
 *   + dont rely on the host's byte order (endianness)
 *   + clean up: wrap usb_bulk_* functions + error handling
-*   + find a better 'num2bin' algorithm
 *   + more config options (?)
 *
 */
